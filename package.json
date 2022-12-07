@@ -18,8 +18,8 @@
         }
     },
     "lint-staged": {
-        "src/**/*.{js,jsx,ts,tsx}": "eslint",
-        "**/*.{js,jsx,tsx,json,ts}": "prettier --write"
+        "src/**/*.{js,jsx,ts,tsx}": "npm run lint",
+        "**/*.{js,jsx,tsx,json,ts}": "npm run format"
     },
     "dependencies": {
         "expo": "~47.0.8",
