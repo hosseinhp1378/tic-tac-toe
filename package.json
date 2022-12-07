@@ -14,8 +14,12 @@
     },
     "husky": {
         "hooks": {
-            "pre-commit": "npm run typecheck && npm run format:check && npm run lint"
+            "pre-commit": "npm run typecheck && lint-staged"
         }
+    },
+    "lint-staged": {
+        "src/**/*.{js,jsx,ts,tsx}": "eslint",
+        "**/*.{js,jsx,tsx,json,ts}": "prettier --write"
     },
     "dependencies": {
         "expo": "~47.0.8",
