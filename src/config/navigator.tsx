@@ -15,7 +15,7 @@ const Stack = createStackNavigator<stackNavigatorParams>();
 export default function Navigator(): ReactElement {
     return (
         <NavigationContainer>
-            <Stack.Navigator>
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="Home" component={Home} />
                 <Stack.Screen name="Game" component={Game} />
             </Stack.Navigator>
