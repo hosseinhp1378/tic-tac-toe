@@ -9,7 +9,7 @@
             "@config/*": ["src/config/*"],
             "@contexts/*": ["src/contexts/*"],
             "@assets/*": ["assets/*"],
-            "@utils": ["src/screens"]
+            "@utils": ["src/utils"]
         }
     }
 }

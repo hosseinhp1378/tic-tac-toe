@@ -15,7 +15,7 @@ export default function Home({ navigation }: HomeProps): ReactElement {
             <ScrollView contentContainerStyle={styles.container}>
                 <Image source={require("@assets/logo.png")} style={styles.logo} />
                 <View style={styles.buttons}>
-                    <Button style={styles.button} title="Single Player" />
+                    <Button onPress={() => navigation.navigate('SinglePlayerGame')} style={styles.button} title="Single Player" />
                     <Button style={styles.button} title="multiplayer" />
                     <Button style={styles.button} title="Login" />
                     <Button style={styles.button} title="Settings" />
