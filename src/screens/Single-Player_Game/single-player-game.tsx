@@ -1,21 +1,47 @@
 import { View } from "react-native";
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState } from "react";
 import { styles } from "./single-player-game.styles";
 import { GradientBackground, Board } from "@components";
-import { printFormattedBoard, BoardState, isEmpty, isFull, getAvailableMoves, isTerminal } from "@utils";
-
+import {
+    printFormattedBoard,
+    BoardState,
+    isEmpty,
+    isFull,
+    getAvailableMoves,
+    isTerminal,
+    getBestMove,
+} from "@utils";
 
 export default function SinglePlayerGame(): ReactElement {
-    const boardState: BoardState = ['x', 'o', null,'x', 'o', null,'x', 'o', null,]
-    printFormattedBoard(boardState)
-    console.log(isTerminal(boardState))
-    // console.log(isEmpty(boardState))
-    // console.log(isFull(boardState))
-    // console.log(getAvailableMoves(boardState))
+    const [boardState, setBoardState] = useState<BoardState>([
+        null,
+        null,
+        null,
+        "o",
+        null,
+        "x",
+        "o",
+        "o",
+        "x",
+    ]);
+    console.log("getBestMove: ", getBestMove(boardState, true));
+
+    const handleOnCellPressed = (cell: number): void => {
+        const stateCopy: BoardState = [...boardState];
+        if (stateCopy[cell] || isTerminal(stateCopy)) return;
+        stateCopy[cell] = "x";
+        setBoardState(stateCopy);
+    };
+
     return (
         <GradientBackground>
             <View style={styles.container}>
-                <Board onCellPressed={(index) => alert(index) } size={300} state={boardState}/>
+                <Board
+                    disabled={Boolean(isTerminal(boardState))}
+                    onCellPressed={cell => handleOnCellPressed(cell)}
+                    size={300}
+                    state={boardState}
+                />
             </View>
         </GradientBackground>
     );
