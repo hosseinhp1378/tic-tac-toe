@@ -101,6 +101,7 @@ export default function SinglePlayerGame(): ReactElement {
                     onCellPressed={cell => handleOnCellPressed(cell)}
                     size={300}
                     state={boardState}
+                    gameResult={gameResult}
                 />
             </View>
         </GradientBackground>
