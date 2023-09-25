@@ -1,7 +1,7 @@
 import { View, Dimensions } from "react-native";
 import React, { ReactElement, useEffect, useState } from "react";
 import { styles } from "./single-player-game.styles";
-import { GradientBackground, Board } from "@components";
+import { GradientBackground, Board, Text, Button } from "@components";
 import { BoardState, isEmpty, isTerminal, getBestMove, Cell, useSounds } from "@utils";
 
 const SCREEN_WIDTH = Dimensions.get("screen").width;
@@ -21,6 +21,16 @@ export default function SinglePlayerGame(): ReactElement {
     const [turn, setTurn] = useState<"HUMAN" | "BOT">(Math.random() < 0.5 ? "HUMAN" : "BOT");
 
     const [isHumanMaximizing, setIsHumanMaximizing] = useState<boolean>(true);
+    const [gamesCount, setGamesCount] = useState<{
+        win: number;
+        loss: number;
+        draw: number;
+    }>({
+        win: 0,
+        loss: 0,
+        draw: 0,
+    });
+
     const playSound = useSounds();
 
     const gameResult = isTerminal(boardState);
@@ -53,27 +63,36 @@ export default function SinglePlayerGame(): ReactElement {
         }
     };
 
+    const newGame = () => {
+        setBoardState([null, null, null, null, null, null, null, null, null]);
+        setTurn(Math.random() < 0.5 ? "HUMAN" : "BOT");
+    };
+
     useEffect(() => {
         if (gameResult) {
             const winner = getWinner(gameResult.winner);
             if (winner === "HUMAN") {
                 try {
                     playSound("win");
-                    alert("You Won!");
+                    setGamesCount(prevState => {
+                        return { ...prevState, win: prevState.win + 1 };
+                    });
                 } catch (error) {
                     console.log(error);
                 }
             } else if (winner === "BOT") {
                 try {
                     playSound("lose");
-                    alert("You Lost!");
+                    setGamesCount({ ...gamesCount, loss: gamesCount.loss + 1 });
                 } catch (error) {
                     console.log(error);
                 }
             } else {
                 try {
                     playSound("draw");
-                    alert("DRAW!");
+                    setGamesCount(prevState => {
+                        return { ...prevState, draw: prevState.draw + 1 };
+                    });
                 } catch (error) {
                     console.log(error);
                 }
@@ -98,6 +117,38 @@ export default function SinglePlayerGame(): ReactElement {
     return (
         <GradientBackground>
             <View style={styles.container}>
+                <View>
+                    <Text weight={400} style={styles.difficulty}>
+                        {" "}
+                        Difficulty: Hard
+                    </Text>
+                </View>
+                <View style={styles.results}>
+                    <View style={styles.resultsBox}>
+                        <Text weight={400} style={styles.resultsTitle}>
+                            Win
+                        </Text>
+                        <Text weight={400} style={styles.resultsCount}>
+                            {gamesCount.win}
+                        </Text>
+                    </View>
+                    <View style={styles.resultsBox}>
+                        <Text weight={400} style={styles.resultsTitle}>
+                            Draw
+                        </Text>
+                        <Text weight={400} style={styles.resultsCount}>
+                            {gamesCount.draw}
+                        </Text>
+                    </View>
+                    <View style={styles.resultsBox}>
+                        <Text weight={400} style={styles.resultsTitle}>
+                            Loss
+                        </Text>
+                        <Text weight={400} style={styles.resultsCount}>
+                            {gamesCount.loss}
+                        </Text>
+                    </View>
+                </View>
                 <Board
                     disabled={Boolean(isTerminal(boardState)) || turn !== "HUMAN"}
                     onCellPressed={cell => handleOnCellPressed(cell)}
@@ -105,6 +156,17 @@ export default function SinglePlayerGame(): ReactElement {
                     state={boardState}
                     gameResult={gameResult}
                 />
+                {gameResult && (
+                    <View style={styles.modal}>
+                        <Text weight={400} style={styles.modalText}>
+                            {" "}
+                            {getWinner(gameResult.winner) === "HUMAN" && "You Won!"}
+                            {getWinner(gameResult.winner) === "BOT" && "You Lost!"}
+                            {getWinner(gameResult.winner) === "DRAW" && "Draw!"}
+                        </Text>
+                        <Button title="Play Again" onPress={() => newGame()} />
+                    </View>
+                )}
             </View>
         </GradientBackground>
     );
