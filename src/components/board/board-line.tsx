@@ -1,6 +1,6 @@
-import { StyleSheet, View } from "react-native";
-import React, { ReactElement } from "react";
-import { BoardResult } from "@utils";
+import { StyleSheet, View, Animated } from "react-native";
+import React, { ReactElement, useEffect, useRef } from "react";
+import { BoardResult, colors } from "@utils";
 
 type BoardLineProps = {
     size: number;
@@ -9,40 +9,64 @@ type BoardLineProps = {
 
 export default function BoardLine({ size, gameResult }: BoardLineProps): ReactElement {
     const diagonalHeight = Math.sqrt(Math.pow(size, 2) + Math.pow(size, 2));
+    const animationRef = useRef<Animated.Value>(new Animated.Value(0));
+
+    useEffect(() => {
+        Animated.timing(animationRef.current, {
+            toValue: 1,
+            duration: 700,
+            useNativeDriver: false,
+        }).start();
+    }, []);
+
     return (
         <>
             {gameResult && gameResult.column && gameResult.direction === "V" && (
-                <View
+                <Animated.View
                     style={[
                         styles.line,
                         styles.vLine,
                         {
                             left: `${33.3333 * gameResult.column - 16.6666} %`,
+                            height: animationRef.current.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: ["0%", "100%"],
+                            }),
                         },
                     ]}
-                ></View>
+                ></Animated.View>
             )}
             {gameResult && gameResult.row && gameResult.direction === "H" && (
-                <View
+                <Animated.View
                     style={[
                         styles.line,
                         styles.hLine,
                         {
                             top: `${33.3333 * gameResult.row - 16.6666} %`,
+                            width: animationRef.current.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: ["0%", "100%"],
+                            }),
                         },
                     ]}
-                ></View>
+                ></Animated.View>
             )}
             {gameResult && gameResult.diagonal && gameResult.direction === "D" && (
-                <View
+                <Animated.View
                     style={[
                         styles.line,
                         styles.dLine,
                         {
-                            height: diagonalHeight,
+                            height: animationRef.current.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: [0, diagonalHeight],
+                            }),
                             transform: [
                                 {
-                                    translateY: -(diagonalHeight - size) / 2,
+                                    translateY: animationRef.current.interpolate({
+                                        inputRange: [0, 1],
+                                        outputRange: [size / 2, -(diagonalHeight - size) / 2],
+                                    }),
                                 },
                                 {
                                     rotateZ: gameResult.diagonal === "MAIN" ? "-45deg" : "45deg",
@@ -50,7 +74,7 @@ export default function BoardLine({ size, gameResult }: BoardLineProps): ReactEl
                             ],
                         },
                     ]}
-                ></View>
+                ></Animated.View>
             )}
         </>
     );
@@ -59,18 +83,16 @@ export default function BoardLine({ size, gameResult }: BoardLineProps): ReactEl
 const styles = StyleSheet.create({
     line: {
         position: "absolute",
-        backgroundColor: "#f03",
+        backgroundColor: colors.lightPurple,
     },
     vLine: {
-        width: 2,
-        height: "100%",
+        width: 4,
     },
     hLine: {
-        height: 2,
-        width: "100%",
+        height: 4,
     },
     dLine: {
-        width: 2,
+        width: 4,
         top: 0,
         left: "50%",
     },

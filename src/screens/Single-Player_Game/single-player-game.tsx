@@ -1,8 +1,10 @@
-import { View } from "react-native";
+import { View, Dimensions } from "react-native";
 import React, { ReactElement, useEffect, useState } from "react";
 import { styles } from "./single-player-game.styles";
 import { GradientBackground, Board } from "@components";
 import { BoardState, isEmpty, isTerminal, getBestMove, Cell, useSounds } from "@utils";
+
+const SCREEN_WIDTH = Dimensions.get("screen").width;
 
 export default function SinglePlayerGame(): ReactElement {
     const [boardState, setBoardState] = useState<BoardState>([
@@ -99,7 +101,7 @@ export default function SinglePlayerGame(): ReactElement {
                 <Board
                     disabled={Boolean(isTerminal(boardState)) || turn !== "HUMAN"}
                     onCellPressed={cell => handleOnCellPressed(cell)}
-                    size={300}
+                    size={SCREEN_WIDTH - 60}
                     state={boardState}
                     gameResult={gameResult}
                 />

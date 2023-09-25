@@ -26,28 +26,17 @@ export default function Board({
                 return (
                     <TouchableOpacity
                         onPress={() => onCellPressed && onCellPressed(index)}
-                        style={styles.cell}
+                        style={[styles.cell, styles[`cell${index}` as "cell"]]}
                         key={index}
                         disabled={cell !== null || disabled}
                     >
-                        <Text style={{ fontSize: size / 8 }} weight={700}>
+                        <Text style={[styles.cellText, { fontSize: size / 7 }]} weight={700}>
                             {cell}
                         </Text>
                     </TouchableOpacity>
                 );
             })}
-            {true && (
-                <BoardLine
-                    size={size}
-                    gameResult={{
-                        winner: "o",
-                        row: 1,
-                        direction: "D",
-                        diagonal: "COUNTER",
-                    }}
-                />
-            )}
-            {/* {gameResult && <BoardLine size={size} gameResult={gameResult} />} */}
+            {gameResult && <BoardLine size={size} gameResult={gameResult} />}
         </View>
     );
 }
