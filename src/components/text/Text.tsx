@@ -7,6 +7,10 @@ type TextProps = {
     children?: ReactNode;
 } & NativeTextProps;
 
+const defaultProps = {
+    weight: "700",
+};
+
 export default function Text({ children, style, weight = 700, ...props }: TextProps): ReactElement {
     return (
         <NativeText
@@ -23,3 +27,5 @@ export default function Text({ children, style, weight = 700, ...props }: TextPr
         </NativeText>
     );
 }
+
+Text.defaultProps = defaultProps;
