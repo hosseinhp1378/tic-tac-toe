@@ -1,63 +1,12 @@
-import { Alert, ScrollView, Switch, TouchableOpacity, View } from "react-native";
-import React, { ReactElement, useEffect, useState } from "react";
+import { ScrollView, Switch, TouchableOpacity, View } from "react-native";
+import React, { ReactElement } from "react";
 import { GradientBackground, Text } from "@components";
 import styles from "./settings.styles";
 import { colors } from "@utils";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
-type SettingsType = {
-    difficulty: keyof typeof difficulties;
-    haptics: boolean;
-    sounds: boolean;
-};
-
-const difficulties = {
-    "1": "Beginner",
-    "3": "Intermediate",
-    "4": "Hard",
-    "-1": "Impossible",
-};
+import { difficulties, useSettings } from "@contexts/settings-context";
 
 export default function Settings(): ReactElement | null {
-    const [settings, setSettings] = useState<SettingsType | null>(null);
-    const defaultSettings: SettingsType = {
-        difficulty: "-1",
-        haptics: true,
-        sounds: true,
-    };
-
-    const storeSetting = async <T extends keyof SettingsType>(
-        setting: T,
-        value: SettingsType[T]
-    ) => {
-        try {
-            const oldSettings = settings ? settings : defaultSettings;
-            const newSettings = {
-                ...oldSettings,
-                [setting]: value,
-            };
-            const jsonSetting = JSON.stringify(newSettings);
-            await AsyncStorage.setItem("@settings", jsonSetting);
-            setSettings(newSettings);
-        } catch (error) {
-            console.log(error);
-            Alert.alert("Error!", "An Error has occred!");
-        }
-    };
-
-    const loadSettings = async () => {
-        try {
-            const settings = await AsyncStorage.getItem("@settings");
-            settings !== null ? setSettings(JSON.parse(settings)) : setSettings(defaultSettings);
-        } catch (error) {
-            console.log(setSettings);
-            setSettings(defaultSettings);
-        }
-    };
-
-    useEffect(() => {
-        loadSettings();
-    }, []);
+    const { settings, storeSetting } = useSettings();
 
     if (!settings) return null;
     return (

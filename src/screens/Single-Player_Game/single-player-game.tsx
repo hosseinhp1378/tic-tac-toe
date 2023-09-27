@@ -3,10 +3,13 @@ import React, { ReactElement, useEffect, useState } from "react";
 import { styles } from "./single-player-game.styles";
 import { GradientBackground, Board, Text, Button } from "@components";
 import { BoardState, isEmpty, isTerminal, getBestMove, Cell, useSounds } from "@utils";
+import { difficulties, useSettings } from "@contexts/settings-context";
 
 const SCREEN_WIDTH = Dimensions.get("screen").width;
 
 export default function SinglePlayerGame(): ReactElement {
+    const { settings } = useSettings();
+
     const [boardState, setBoardState] = useState<BoardState>([
         null,
         null,
@@ -107,7 +110,12 @@ export default function SinglePlayerGame(): ReactElement {
                     setIsHumanMaximizing(false);
                     setTurn("HUMAN");
                 } else {
-                    const best = getBestMove(boardState, !isHumanMaximizing, 0, 1);
+                    const best = getBestMove(
+                        boardState,
+                        !isHumanMaximizing,
+                        0,
+                        parseInt(settings ? settings.difficulty : "-1")
+                    );
                     insertCell(best, isHumanMaximizing ? "o" : "x");
                     setTurn("HUMAN");
                 }
@@ -120,7 +128,7 @@ export default function SinglePlayerGame(): ReactElement {
                 <View>
                     <Text weight={400} style={styles.difficulty}>
                         {" "}
-                        Difficulty: Hard
+                        Difficulty: {settings ? difficulties[settings.difficulty] : "Impossible"}
                     </Text>
                 </View>
                 <View style={styles.results}>
