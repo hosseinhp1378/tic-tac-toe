@@ -1,5 +1,5 @@
 import { ScrollView, View, Image } from "react-native";
-import React, { ReactElement, useContext, useState } from "react";
+import React, { ReactElement, useState } from "react";
 import { styles } from "./home.styles";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { stackNavigatorParams } from "@config/navigator";
@@ -12,7 +12,7 @@ type HomeProps = {
 };
 
 export default function Home({ navigation }: HomeProps): ReactElement {
-    const { user, setUser } = useAuth();
+    const { user } = useAuth();
     const [signedOut, setSigendOut] = useState(false);
     return (
         <GradientBackground>
