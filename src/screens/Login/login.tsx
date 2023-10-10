@@ -1,6 +1,6 @@
-import { ScrollView, TextInput as NativeTextInput, Alert } from "react-native";
+import { ScrollView, TextInput as NativeTextInput, Alert, TouchableOpacity } from "react-native";
 import React, { ReactElement, useRef, useState } from "react";
-import { Button, GradientBackground, TextInput } from "@components";
+import { Button, GradientBackground, Text, TextInput } from "@components";
 
 import styles from "./login.styles";
 import { Auth } from "aws-amplify";
@@ -29,7 +29,12 @@ export default function Login({ navigation }: LoginProp): ReactElement {
             const res = await Auth.signIn(username, password);
             navigation.navigate("Home");
         } catch (error: any) {
-            console.log(error.message || "An error occured!");
+            if (error.code === "UserNotConfirmedException") {
+                navigation.navigate("Signup", {
+                    username,
+                });
+            }
+
             Alert.alert("Error!", error.message || "An error occured!");
         }
         setIsLoading(false);
@@ -66,6 +71,9 @@ export default function Login({ navigation }: LoginProp): ReactElement {
                     onPress={login}
                     style={{ marginBottom: 30 }}
                 />
+                <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
+                    <Text style={styles.registerLink}>Don&apos;t have an account?</Text>
+                </TouchableOpacity>
             </ScrollView>
         </GradientBackground>
     );
