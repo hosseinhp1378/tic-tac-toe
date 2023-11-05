@@ -1,0 +1,8 @@
+# input AMPLIFY { globalAuthRule: AuthRule = { allow: public } }
+type Player @model {
+  id: ID!
+  cognitoID: String!
+  username: String!
+  name: String!
+  email: AWSEmail!
+}

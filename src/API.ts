@@ -116,46 +116,6 @@ export type ModelPlayerConnection = {
   nextToken?: string | null,
 };
 
-export type ModelSubscriptionPlayerFilterInput = {
-  id?: ModelSubscriptionIDInput | null,
-  cognitoID?: ModelSubscriptionStringInput | null,
-  username?: ModelSubscriptionStringInput | null,
-  name?: ModelSubscriptionStringInput | null,
-  email?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionPlayerFilterInput | null > | null,
-  or?: Array< ModelSubscriptionPlayerFilterInput | null > | null,
-};
-
-export type ModelSubscriptionIDInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-  in?: Array< string | null > | null,
-  notIn?: Array< string | null > | null,
-};
-
-export type ModelSubscriptionStringInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-  in?: Array< string | null > | null,
-  notIn?: Array< string | null > | null,
-};
-
 export type CreatePlayerMutationVariables = {
   input: CreatePlayerInput,
   condition?: ModelPlayerConditionInput | null,
@@ -250,10 +210,6 @@ export type ListPlayersQuery = {
   } | null,
 };
 
-export type OnCreatePlayerSubscriptionVariables = {
-  filter?: ModelSubscriptionPlayerFilterInput | null,
-};
-
 export type OnCreatePlayerSubscription = {
   onCreatePlayer?:  {
     __typename: "Player",
@@ -267,10 +223,6 @@ export type OnCreatePlayerSubscription = {
   } | null,
 };
 
-export type OnUpdatePlayerSubscriptionVariables = {
-  filter?: ModelSubscriptionPlayerFilterInput | null,
-};
-
 export type OnUpdatePlayerSubscription = {
   onUpdatePlayer?:  {
     __typename: "Player",
@@ -282,10 +234,6 @@ export type OnUpdatePlayerSubscription = {
     createdAt: string,
     updatedAt: string,
   } | null,
-};
-
-export type OnDeletePlayerSubscriptionVariables = {
-  filter?: ModelSubscriptionPlayerFilterInput | null,
 };
 
 export type OnDeletePlayerSubscription = {
