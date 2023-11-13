@@ -12,7 +12,6 @@ export type CreatePlayerInput = {
 
 export type ModelPlayerConditionInput = {
   cognitoID?: ModelStringInput | null,
-  username?: ModelStringInput | null,
   name?: ModelStringInput | null,
   email?: ModelStringInput | null,
   and?: Array< ModelPlayerConditionInput | null > | null,
@@ -72,15 +71,15 @@ export type Player = {
 };
 
 export type UpdatePlayerInput = {
-  id: string,
+  id?: string | null,
   cognitoID?: string | null,
-  username?: string | null,
+  username: string,
   name?: string | null,
   email?: string | null,
 };
 
 export type DeletePlayerInput = {
-  id: string,
+  username: string,
 };
 
 export type ModelPlayerFilterInput = {
@@ -109,6 +108,12 @@ export type ModelIDInput = {
   attributeType?: ModelAttributeTypes | null,
   size?: ModelSizeInput | null,
 };
+
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
 
 export type ModelPlayerConnection = {
   __typename: "ModelPlayerConnection",
@@ -171,7 +176,7 @@ export type DeletePlayerMutation = {
 };
 
 export type GetPlayerQueryVariables = {
-  id: string,
+  username: string,
 };
 
 export type GetPlayerQuery = {
@@ -188,9 +193,11 @@ export type GetPlayerQuery = {
 };
 
 export type ListPlayersQueryVariables = {
+  username?: string | null,
   filter?: ModelPlayerFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
+  sortDirection?: ModelSortDirection | null,
 };
 
 export type ListPlayersQuery = {
