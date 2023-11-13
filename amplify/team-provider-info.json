@@ -17,6 +17,12 @@
       },
       "api": {
         "tictactoe": {}
+      },
+      "function": {
+        "postConfirmation": {
+          "deploymentBucketName": "amplify-tictactoe-dev-163342-deployment",
+          "s3Key": "amplify-builds/postConfirmation-6e6b506b713459704355-build.zip"
+        }
       }
     }
   }
